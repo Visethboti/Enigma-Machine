@@ -155,6 +155,7 @@
     <ClInclude Include="EnigmaMachine.h" />
     <ClInclude Include="BEnigmaMachineManager.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="plugBoard.h" />
     <ClInclude Include="Reflector.h" />
     <ClInclude Include="Rotor.h" />
   </ItemGroup>
@@ -168,6 +169,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="plugBoard.cpp" />
     <ClCompile Include="Reflector.cpp" />
     <ClCompile Include="Rotor.cpp" />
   </ItemGroup>

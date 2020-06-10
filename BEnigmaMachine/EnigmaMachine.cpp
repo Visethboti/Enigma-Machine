@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "EnigmaMachine.h"
 
+
 // Constructor
 EnigmaMachine::EnigmaMachine()
 {
@@ -16,6 +17,8 @@ EnigmaMachine::EnigmaMachine()
 	reflectorC = "FVPJIAOYEDRZXWGCTKUQSBNMHL";
 	reflectorBThin = "ENKQAUYWJICOPBLMDXZVFTHRGS";
 	reflectorCThin = "RDOBJNTKVEHMLFCWZAXGYIPSUQ";
+
+	usePlugBoard = false;
 }
 
 // Set up the rotor and reflector's position and number from the option
@@ -37,6 +40,7 @@ void EnigmaMachine::enigmaSetup(int rot1num, int rot2num, int rot3num, int rot1p
 
 string EnigmaMachine::setRotor(int rotnum) {
 	// Make the rotor have the string of the rotor number.
+	// Choose the rotor number from the 5 options
 	string rotorRightString;
 	switch (rotnum) {
 	case 1:
@@ -56,12 +60,13 @@ string EnigmaMachine::setRotor(int rotnum) {
 		break;
 	}
 
-	// Return the numbered rotor string
+	// Return the string of the rotor number/type inputted
 	return rotorRightString;
 }
 
 void EnigmaMachine::setReflector(int reflectorNum) {
 	// Make the rotor have the string of the rotor number.
+	// Choose the reflector type from the 5 options
 	string rotorRightString, reflectorType;
 	switch (reflectorNum) {
 	case 1:
@@ -86,7 +91,7 @@ void EnigmaMachine::setReflector(int reflectorNum) {
 		break;
 	}
 
-	// Return the type's rotor string
+	// Return  the string of the reflector type inputted
 	rotorReflector.setReflectorType(reflectorType, rotorRightString);
 }
 
@@ -95,16 +100,40 @@ void EnigmaMachine::setReflector(int reflectorNum) {
 string EnigmaMachine::getStatus() {
 	string status;
 
-	status = "|   Rotor   |    Rotor Type   |   Rotor Position   |            Left            |            Right           | \n";
-	status += "|   Rotor 1 |       " + to_string(rotor1.getRotorNum()) + "         |          " + to_string(rotor1.getRotorPos()) + "         | " + rotor1.getRotorLeft() + " | " + rotor1.getRotorRight() + " | \n";
-	status += "|   Rotor 2 |       " + to_string(rotor2.getRotorNum()) + "         |          " + to_string(rotor2.getRotorPos()) + "         | " + rotor2.getRotorLeft() + " | " + rotor2.getRotorRight() + " | \n";
-	status += "|   Rotor 3 |       " + to_string(rotor3.getRotorNum()) + "         |          " + to_string(rotor3.getRotorPos()) + "         | " + rotor3.getRotorLeft() + " | " + rotor3.getRotorRight() + " | \n";
-	status += "| Reflector |   " + rotorReflector.getReflectorType() + "   |    No Position     | " + rotorReflector.getReflectorLeft() + " | " + rotorReflector.getReflectorRight() + " | \n";
-
+	// Create a string of the current status of the rotors and reflector
+	status = "|  Rotor  |   Rotor Type  | Rotor Position |            Left            |            Right           | Plug Board | \n";
+	status += "|  Rotor1 |      " + to_string(rotor1.getRotorNum()) + "        |        " + to_string(rotor1.getRotorPos()) + "       | " + rotor1.getRotorLeft() + " | " + rotor1.getRotorRight() + " |      " + to_string(usePlugBoard) + "     | \n"; 
+	status += "|  Rotor2 |      " + to_string(rotor2.getRotorNum()) + "        |        " + to_string(rotor2.getRotorPos()) + "       | " + rotor2.getRotorLeft() + " | " + rotor2.getRotorRight() + " | " + plugBoard1.getLeft() + " | \n";
+	status += "|  Rotor3 |      " + to_string(rotor3.getRotorNum()) + "        |        " + to_string(rotor3.getRotorPos()) + "       | " + rotor3.getRotorLeft() + " | " + rotor3.getRotorRight() + " | " + plugBoard1.getRight() + " | \n";
+	status += "|Reflector|  " + rotorReflector.getReflectorType() + "  |  No Position   | " + rotorReflector.getReflectorLeft() + " | " + rotorReflector.getReflectorRight() + " | \n";
+	status += "                                           | 0123456789<@#$%>0123456789 | 0123456789<@#$%>0123456789 | 0123456789 |\n";
+	// Return the status string
 	return status;
 }
 
+// Get and Set usePlugBoard
+bool EnigmaMachine::getUsePlugBoard() {
+	return usePlugBoard;
+}
+void EnigmaMachine::setUsePlugBoard(bool input) {
+	usePlugBoard = input;
+}
 
+// Set pairs into the plugboard
+void EnigmaMachine::setPlugBoardPair(string inputPair) {
+	plugBoard1.setPair(inputPair);
+}
+
+// Reset all pairs in teh plug board and set usePlugboard to false
+void EnigmaMachine::resetPlugBoard() {
+	plugBoard1.resetPair();
+	usePlugBoard = false;
+}
+
+// Get all existing pair in the plugboard, return a string of left and right. (To prevent duplicate char)
+string EnigmaMachine::getAllExistingPairs() {
+	return plugBoard1.getLeft() + plugBoard1.getRight();
+}
 
 // Debugging Tool
 string EnigmaMachine::getDebug() {
@@ -113,13 +142,21 @@ string EnigmaMachine::getDebug() {
 }
 
 
-// enigma input a char, will manage through all 3 rotor and output back an encypte of that char
+// enigma input a char, will manage through the plugBoard (or not) then all 3 rotor and reflector and output back an encypted of that char
 char EnigmaMachine::encypt(char input) {
 	char result;
+
+	// Going through plugboard;
+	if (usePlugBoard)
+		result = plugBoard1.crossPlugBoard(input);
+	else
+		result = input;
+
+	// First rotor
 	rotor1.rotate();
-	result = rotor1.inputChar(input);
+	result = rotor1.inputChar(result);
 	
-	// reset rotor and rotate the next rotator
+	// Check if rotor need to reset and rotate the next rotor (when each rotor make a full revolution)
 	if (rotor1.getRotorPos() > 27) {
 		rotor1.resetPos();
 		rotor2.rotate();
@@ -132,15 +169,23 @@ char EnigmaMachine::encypt(char input) {
 		}
 	}
 	
+	// Going through second and third rotor
 	result = rotor2.inputChar(result);
 	result = rotor3.inputChar(result);
 
+	// Going through the reflector
 	result = rotorReflector.inputChar(result);
 
 	// Go backward from the reflector
+	// Going through the third second and then the first rotor from the reverse side
 	result = rotor3.reverseInputChar(result);
 	result = rotor2.reverseInputChar(result);
 	result = rotor1.reverseInputChar(result);
 
+	// Going through plugboard on the way out
+	if (usePlugBoard)
+		result = plugBoard1.crossPlugBoard(result);
+
+	// Come out the first rotor and result the result char;
 	return result;
 }

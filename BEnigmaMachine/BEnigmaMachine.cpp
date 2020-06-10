@@ -20,6 +20,9 @@ int main()
 
 	bEM.printMenu();
 
+
+
+	/* 
 	string s = "ab c d ef g";
 	cout << s << endl;
 
@@ -33,7 +36,7 @@ int main()
 
 	cout << s << endl;
 
-	/*
+	
 	string s = "ABC";
 	char temp;
 	cout << s << endl;

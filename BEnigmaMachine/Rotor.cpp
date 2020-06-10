@@ -59,11 +59,13 @@ void Rotor::resetPos() {
 
 // Input Method, input a char and output the char accordingly then rotate by one position.
 char Rotor::inputChar(char input) {
+	// Find the index of where the input char at in rotorLeft and output the char at that index in rotorRight
 	return rotorRight.at(rotorLeft.find(input));
 }
 
 
 // Reverse Input Method, getting char from the left of the rotor.
 char Rotor::reverseInputChar(char input) {
+	// Find the index of where the inter char at in rotorRight and output the char at that index in rotorLeft
 	return rotorLeft.at(rotorRight.find(input));
 }

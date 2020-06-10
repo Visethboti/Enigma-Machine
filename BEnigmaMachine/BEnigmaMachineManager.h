@@ -5,6 +5,9 @@ class BEnigmaMachineManager
 {
 private:
 	EnigmaMachine enigmaMachine1;
+
+	// User input check method
+	bool isLetters(string inputStr);
 public:
 	// Constructor
 	BEnigmaMachineManager();
@@ -16,7 +19,7 @@ public:
 	void printDebug();
 
 	// Encyt the string
-	void encrytStr(string inputStr);
+	string encrytStr(string inputStr);
 
 	// Print Menu and get user input
 	void printMenu();
