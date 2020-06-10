@@ -1,0 +1,5 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: The intermediate directory (x64\Debug\) contains files shared from another project (HisterEnigmaMachine.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  BEnigmaMachineManager.cpp
+g:\gigabytelibrary\documents\github\enigma-machine-c-\benigmamachine\benigmamachine\benigmamachinemanager.cpp(80): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+g:\gigabytelibrary\documents\github\enigma-machine-c-\benigmamachine\benigmamachine\benigmamachinemanager.cpp(83): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  BEnigmaMachine.vcxproj -> G:\GigabyteLibrary\Documents\GitHub\Enigma-Machine-c-\BEnigmaMachine\x64\Debug\BotiEnigmaMachine.exe
